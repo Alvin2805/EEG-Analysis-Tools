@@ -1,0 +1,16 @@
+#!/usr/local/bin/perl
+
+#if( $#ARGV == -1 ){
+#    printf "./all_makefile.pl \n";
+#    exit;
+#   }
+
+system "make";
+system "make -f Makefile_all-electrode";
+system "make -f Makefile_all-eeg-electrode";
+system "make -f Makefile_dis";
+system "make -f Makefile_aveemg";
+system "gcc -o FFT_COH2 FFT_COH2.c -lm";
+system "gcc -o FFT_COH2-EEG FFT_COH2-EEG.c -lm";
+
+

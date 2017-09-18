@@ -1,0 +1,89 @@
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+   Program : Calculate cosine(angle) between 2 scalp electrode  
+   Year    : 13.6.2002
+   Compile : gcc -o cos cos.c -lm
+   To Run  : ./cos 
+   Copyright (C) 2002 by Norlaili M S 
+   Produced (P) 2002 by Murayama Laboratory
+   ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+FILE *fpi1, *fpo;
+char fileinp[200]="coordinate";  /* "coordinate" is inputfile name */
+char file[200];
+char string[256], electrode[20][50];
+int i, j;
+double phi[100], theta[100], x[100], y[100], z[100], xx[100][100], yy[100][100], zz[100][100], cosine[100][100];
+
+void Manual( );
+void FileCheck( );
+void Read( );
+void Cosine( );
+void Write( );
+
+main(int argc, char *argv[ ]){
+    if (argc != 1) Manual(argc);
+    sprintf(file, "angle");    /* Outputfile name is angle */
+    FileCheck( );
+    Read( );
+    Cosine( );
+    Write( );
+}
+
+void Manual( ){
+    printf("\n To run programme type : \n");
+    printf("          ./cos \n\n");
+    exit(1);
+}
+
+void FileCheck( ){
+    if ((fpi1 = fopen(fileinp, "r")) == NULL){
+	printf("no file %s \n", fileinp);
+	exit(-1);
+    }
+}
+
+void Read( ){
+    fpi1=fopen(fileinp, "r");
+    fgets(string,256,fpi1);
+    fgets(string,256,fpi1);
+    for(i=0;i<19;i++){
+    fscanf(fpi1, "%s %lf %lf %lf %lf %lf", electrode[i],&phi[i], &theta[i], &x[i], &y[i], &z[i]);
+    }
+    fclose(fpi1);
+}
+
+void Cosine( ){
+    for(j=0;j<19;j++){
+	for(i=0;i<19;i++){
+	    xx[j][i] = (x[j]-x[i])*(x[j]-x[i]);
+	    yy[j][i] = (y[j]-y[i])*(y[j]-y[i]);
+	    zz[j][i] = (z[j]-z[i])*(z[j]-z[i]);
+	    cosine[j][i] = 1 - ((xx[j][i]+yy[j][i]+zz[j][i])/2);
+	}
+    }
+}
+
+void Write( ){
+    fpo=fopen(file,"w");
+    fprintf(fpo,"   Fp1 F7 T3 T5 O1 F3 C3 P3 Fz Cz Pz F4 C4 P4 Fp2 F8 T4 T6 O2\n");
+    for(j=0;j<19;j++){
+	fprintf(fpo, "%s ", electrode[j]);
+	for(i=0;i<19;i++){
+	    fprintf(fpo, "%lf ", cosine[j][i]);
+	}
+	fprintf(fpo, "\n");
+    }
+    fclose(fpo);
+}
+
+
+
+
+
+
+

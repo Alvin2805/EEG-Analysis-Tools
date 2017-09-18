@@ -1,0 +1,12 @@
+$vi raw_loop
+if test $# -ne 2
+then
+echo "./raw_loop <filename> <loop>"
+fi
+if test $# -eq 2
+then
+for(( i=0 ; i<=$2; i++))
+do
+./rawwer $1"_ch1".ascii" 0 60000 0 200 
+done
+fi

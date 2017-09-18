@@ -1,0 +1,82 @@
+/*#############################################################################
+
+
+
+     c[ｍx1行列] + a[ｍxｍ行列] x c[ｍx１行列] = p[ｍx１行列]
+       未知数                     未知数
+       
+                            の計算
+
+
+
+ ###########################################################################*/
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<math.h>
+#include"CSD.h"
+
+void Channel( );
+void Remove_bad_epoch( );
+void File_administration( );
+void Spherical_laplacian( );
+void FFT_COH( );
+
+main(int argc ,char *argv[ ])
+{
+
+    int time;
+    
+    char *g_matrix_fname;
+    char *g_m_matrix;
+    char *z_matrix_fname; 
+    
+
+    if(argc!=5){
+	puts("./csd_all-eeg-electrode  <g_matix ファイル名> <g_m-1_matrix> <filename(.eeg_emg)> <time_band>");
+	exit(1);
+    }
+
+
+    /*################### 動的メモリ確保 ＆初期化 #################*/
+    
+    g_matrix_fname = (char *)malloc(20*sizeof(char ));
+    if(g_matrix_fname == NULL){
+	puts("メモリが確保できません。");
+	exit(-1);
+    }
+
+    g_m_matrix = (char *)malloc(20*sizeof(char ));
+    if(g_m_matrix == NULL){
+	puts("メモリが確保できません。");
+	exit(-1);
+    }
+
+    z_matrix_fname = (char *)malloc(80*sizeof(char ));
+    if(z_matrix_fname == NULL){
+      puts("メモリが確保できません。");
+      exit(-1);
+    }
+
+
+  
+    /*#####################################################################*/
+
+    sprintf(g_matrix_fname,"%s",argv[1]);
+    sprintf(g_m_matrix,"%s",argv[2]);
+    sprintf(z_matrix_fname,"%s",argv[3]);
+    time = atoi(argv[4]);
+
+    Channel(z_matrix_fname,time);
+   
+    Remove_bad_epoch(z_matrix_fname,time);
+
+    File_administration(g_matrix_fname,z_matrix_fname,time); /*####    a,z の行列値を取得  & 出力処理  #####*/
+
+    Spherical_laplacian(g_m_matrix,z_matrix_fname,time);
+    
+}
+
+

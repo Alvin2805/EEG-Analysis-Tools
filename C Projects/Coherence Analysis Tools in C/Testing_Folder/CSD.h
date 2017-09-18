@@ -1,0 +1,13 @@
+#define  MATRIX             19
+#define  PAI2                6.28318530717958648
+#define  FILESUU             5
+#define  CHANNELSUU         32
+#define  EPOCH             58
+#define  INTERVAL         1024 
+#define  SAMPLING_FRE     1000
+#define  EMG_CH             19
+#define  EEG_START           0
+#define  EEG_END            18
+#define  MAX_VOLT          100
+#define  EXP_TIME       60000
+#define  WANTEDDATA     60000

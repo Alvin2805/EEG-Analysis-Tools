@@ -1,0 +1,15 @@
+LOADLIBES = -O2 -lm
+OBJS1 =  main_avestd-emg.o Channel.o Remove_bad_epoch.o AVE_EMG.o
+ 
+EXE1  =  ave_emg
+
+$(EXE1) : $(OBJS1)
+	gcc $(LOADLIBES) $(OBJS1)  -o  $(EXE1)
+	rm  $(OBJS1)  
+
+
+
+main_avestd-emg.o : main_avestd-emg.c CSD.h
+Channel.o : Channel.c CSD.h
+Remove_bad_epoch.o : Remove_bad_epoch.c CSD.h
+AVE_EMG.o : AVE_EMG.c CSD.h

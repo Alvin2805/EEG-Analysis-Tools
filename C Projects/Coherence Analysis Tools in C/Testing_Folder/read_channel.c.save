@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include "CSD.h"
+
+void channel(char *newz, int time)
+{
+	int i, j, f, data1, data2, ch_number;
+	int expe_time, out_volt, i_ch, i_point, start, and;
+	char fin[100], fname[100], fout[100], f_ch[100];
+	FILE *FIN, *FOUT;
+	
+	}

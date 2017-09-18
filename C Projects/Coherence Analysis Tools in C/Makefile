@@ -1,0 +1,19 @@
+LOADLIBES = -O2 -lm
+OBJS1 =  main.o Channel.o Remove_bad_epoch.o file_administration.o calculation.o inverse_of_g_matrix.o Spherical_laplacian.o FFT_COH.o
+ 
+EXE1  =  csd
+
+$(EXE1) : $(OBJS1)
+	gcc $(LOADLIBES) $(OBJS1)  -o  $(EXE1)
+	rm  $(OBJS1)  
+
+
+
+main.o : main.c CSD.h
+Channel.o : Channel.c CSD.h
+Remove_bad_epoch.o : Remove_bad_epoch.c CSD.h
+file_administration.o : file_administration.c calculation.c inverse_of_g_matrix.c CSD.h
+calculation.o : calculation.c CSD.h
+inverse_of_g_matrix.o :inverse_of_g_matrix.c CSD.h
+Spherical_laplacian.o : Spherical_laplacian.c CSD.h
+FFT_COH.o : FFT_COH.c CSD.h
