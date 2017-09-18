@@ -7,4 +7,4 @@ The analysis tools including:
 - Non-Parametric Analysis
 	=> Band powers
 	=> Coherence
-	=> Spindle
+	=> Spindles
