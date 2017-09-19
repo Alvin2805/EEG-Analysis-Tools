@@ -40,7 +40,22 @@ void channel(char *new_z, int time)
 		{
 			sprintf(fout,"%s_ch%d.bin",fname,i_ch);
 			FOUT=fopen(fout,"wb");
+			for(i_point=0;i_point<(expe_time-WANTEDDATA);i_point++)
+			{
+				data1=fgetc(FIN);
+				data2=fgetc(FIN);
+			}
+			
+			for(i_point=(expe_time-WANTEDDATA);i_point<(expe_time*time);i_point++)
+			{
+				data1=fgetc(FIN);
+				data2=fgetc(FIN);
+				fputc(data1,FOUT);
+				fputc(data2,FOUT);
+			}
+			fclose(FOUT);
 		}
+		fcose(FIN);
 	}
 }
 
