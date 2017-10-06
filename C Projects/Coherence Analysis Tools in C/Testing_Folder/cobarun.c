@@ -11,6 +11,7 @@
 int main(int argc,char *argv[])
 {
 	char execution[100];
+	int channel;
 	
 	Channel(argv[1],1);
 	
@@ -29,9 +30,12 @@ int main(int argc,char *argv[])
 	printf("4th phase finished\n");
 	
 	//system(run_system)
-	sprintf(execution,"./FFT_COH2 %s 9 1",argv[1]);;
-	system(execution);
-	
+//	for (channel=0;channel<19;channel++)
+//	{
+//		sprintf(execution,"./FFT_COH %s %d 1",argv[1],channel);
+//		system(execution);
+//	}
+	sprintf(execution,"./FFT_COH2 %s 9 1",argv[1]);
 	printf("system finished\n");
 	return 0;
 }

@@ -97,5 +97,5 @@ void Channel(char *new_z,int time)
 		}
    
 	}
-	system("rm *.bin"); 
+//	system("rm *.bin"); 
 }

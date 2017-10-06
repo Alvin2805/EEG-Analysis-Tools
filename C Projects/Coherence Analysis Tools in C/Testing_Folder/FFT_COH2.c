@@ -1,11 +1,3 @@
-/*#############################################################################
-
-                           Function for FFT
-
-                       FFT_COH2(int argc, char *argv[ ])
-
-                             No return value
-###############################################################################*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,7 +32,7 @@ FILE *FIN, *FOUT_P, *FOUT_RI, *FOUT, *FIN_CH1, *FIN_CH2, *FIN_PX, *FIN_PY, *FIN_
 
 FILE *tempfile;
 
-main(int argc, char *argv[ ]){
+main(int *argc, char *argv[ ]){
     
   /*################Memory Allocation and Initialization################*/
     
@@ -619,9 +611,9 @@ main(int argc, char *argv[ ]){
      fclose(FIN_XSP);
      fclose(FOUT);
 
-     system("rm *.fftri");
-     system("rm *.fftp");
-     system("rm *.x_sp");
+  //   system("rm *.fftri");
+//     system("rm *.fftp");
+    // system("rm *.x_sp");
      
 }
 
