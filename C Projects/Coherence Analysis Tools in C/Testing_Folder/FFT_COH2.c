@@ -267,12 +267,12 @@ main(int *argc, char *argv[ ]){
       
       xpower_max = 0;
       for (i_data=0; i_data < n/2; i_data++){
-	  xr[i_data] =  xr[i_data] * sqrt(8/3) * 0.001;
-	  xi[i_data] =  xi[i_data] * sqrt(8/3) * 0.001;
-	  xpower[i_data] = xr[i_data] * xr[i_data] + xi[i_data] * xi[i_data];
-	  xpower_max += xpower[i_data]; 
+		 xr[i_data] =  xr[i_data] * sqrt(8/3) * 0.001;
+		 xi[i_data] =  xi[i_data] * sqrt(8/3) * 0.001;
+	  	 xpower[i_data] = xr[i_data] * xr[i_data] + xi[i_data] * xi[i_data];
+	  	 xpower_max += xpower[i_data]; 
       }
-      
+		
       sprintf(fout_p,"%s_ch%d_%d-%d.fftp",argv[1],EMG_CH,start,end);
       FOUT_P = fopen(fout_p, "w");
       sprintf(fout_ri,"%s_ch%d_%d-%d.fftri",argv[1],EMG_CH,start,end);
