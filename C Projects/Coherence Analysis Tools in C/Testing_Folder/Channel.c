@@ -1,6 +1,6 @@
 /*#############################################################################
 
-             Function that change raw data from Binary mode to ASCII mode
+             Function that change raw data from Binary to ASCII format
 
                        Channel(char *new_z,int time)
 
