@@ -133,7 +133,7 @@ main(int *argc, char *argv[ ]){
     fscanf(FIN,"%s %d %s %d \n",timepoints, &total_data, electrode, &total_electrodes);
     fgets(string,256,FIN);
     for(j=0;j<total_data;j++){
-	for(i=EEG_START;i<=EEG_END;i++){             
+	for(i=EEG_START;i<=EEG_END;i++){
 	    fscanf(FIN,"%lf",&data[j][i]);
 	}
     }
