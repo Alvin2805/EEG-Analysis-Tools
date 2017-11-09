@@ -292,7 +292,7 @@ main(int *argc, char *argv[ ]){
 		for(j=start;j<end;j++){
 			xr[i_data] = data[j][EEG_CH] - ave;
 			fprintf(tempfile,"%f\n",data[j][EEG_CH]);
-			i_data++
+			i_data++;
 		}
       
 		fclose(tempfile);
