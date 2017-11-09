@@ -294,41 +294,41 @@ main(int *argc, char *argv[ ]){
 			fprintf(tempfile,"%f\n",data[j][EEG_CH]);
 			i_data++;
 		}
-      
+
 		fclose(tempfile);
 		n=i_data;
 		i_data=1;
-		
+
 		while(( (int)pow(2,i_data) % n ) != 0){
 			i_data++;
 		}
 		m=i_data;
-      
+
 		/* FFT Calculation begin */
 
 		/* Set Sine Table */
 
       	freq_order = PAI2 / n;
 		st[0] = 0.0;
-	
+
 		for(i_data=1; i_data < n/4; i_data++){
 			st[i_data] = sin(i_data * freq_order);
 		}
-	
+
 		st[n/4] = 1.0;
 		/**********************************/
-  
+
 		for(i_data=0; i_data < n; i_data++){ /* Hanning Window + Initialize*/
-			xr[i_data] = xr[i_data] / 2.0 * ( 1.0  -  cos( PAI2 * ( (double)i_data / (double)(n - 1)) )  ); 
+			xr[i_data] = xr[i_data] / 2.0 * ( 1.0  -  cos( PAI2 * ( (double)i_data / (double)(n - 1)) )  );
 			xi[i_data] = 0.0;
 		}
-      
+
 		j_data = n/2;   /* Bit Reversal */
-      
+
 		for (i_data=1; i_data <= n-3; i_data++){
 			if (i_data< j_data){
 				temp = xr[i_data]; xr[i_data] = xr[j_data]; xr[j_data] = temp;
-				temp = xi[i_data]; xi[i_data] = xi[j_data]; xi[j_data] = temp;	
+				temp = xi[i_data]; xi[i_data] = xi[j_data]; xi[j_data] = temp;
 			}
 			k = n/2;
 			while (k <= j_data){
@@ -337,17 +337,16 @@ main(int *argc, char *argv[ ]){
 			}
 			j_data += k;
 		}
-      
 		p = 1;  /* Butterfly Algorithm */
 		np = n;
-      
+
 		for (k=1; k <= m; k++){
 			pp = p + p;
 			np /= 2;
-	
+
 			for (j_data=0; j_data < p; j_data++){
 				jw = j_data * np;
-	  
+
 				if (jw <= n/4){
 					wr = st[n/4 - jw];
 					wi = st[jw];
@@ -356,9 +355,9 @@ main(int *argc, char *argv[ ]){
 					wr = - st[jw - n/4];
 					wi = st[n/2 - jw];
 				}
-	  
+
 				wi = - wi;
-	  
+
 				for(i_data=j_data; i_data < n; i_data += pp){
 					ip = i_data + p;
 					tr = xr[ip] * wr - xi[ip] * wi;
@@ -367,21 +366,21 @@ main(int *argc, char *argv[ ]){
 					xi[ip] = xi[i_data] - ti;
 					xr[i_data] = xr[i_data] + tr;
 					xi[i_data] = xi[i_data] + ti;
-				}		
+				}
 			}
 			p = pp;
 		}
-      
+
       /* Power Spectral Calculation */
-      
+
 		xpower_max = 0;
 		for (i_data=0; i_data < n/2; i_data++){
 			xr[i_data] =  xr[i_data] * sqrt(8/3) * 0.001;
 			xi[i_data] =  xi[i_data] * sqrt(8/3) * 0.001;
 			xpower[i_data] = xr[i_data] * xr[i_data] + xi[i_data] * xi[i_data];
-			xpower_max += xpower[i_data]; 
+			xpower_max += xpower[i_data];
 		}
-      
+
 		sprintf(fout_p,"%s_ch%d_%d-%d.fftp",argv[1],EEG_CH,start,end);
 		FOUT_P = fopen(fout_p, "w");
 		sprintf(fout_ri,"%s_ch%d_%d-%d.fftri",argv[1],EEG_CH,start,end);
@@ -391,17 +390,17 @@ main(int *argc, char *argv[ ]){
 			fprintf( FOUT_P, "%lf\t%lf\n", ( 1.0 * SAMPLING_FRE / n ) * ( i_data + 1 ), xpower[i_data]);
 			fprintf( FOUT_RI, "%lf\t%lf\t%lf\n", ( 1.0 * SAMPLING_FRE / n ) * ( i_data + 1 ), xr[i_data], xi[i_data] );
 		}
-      
+
 		fclose(FOUT_P);
 		fclose(FOUT_RI);
 	}
-    
-     
+
+
 
     /*################Cross Spectral Calculation################*/
-	   
+
     for(i=0;i<(total_data / INTERVAL);i++){
-      
+
 		start = i * INTERVAL;
 		end   = (i+1) * INTERVAL;
 
@@ -411,12 +410,12 @@ main(int *argc, char *argv[ ]){
 		if((FIN_CH1=fopen(fin_1,"r"))==NULL || (FIN_CH2=fopen(fin_2,"r"))==NULL){
 			fprintf(stderr, "I can't find %s and %s. I'm sorry !! \n",fin_1,fin_2);
 			exit(-1);
-		}	
+		}
 
 		sprintf(fout,"%s_%d-%d.x_sp",argv[1],start,end);
 		FOUT=fopen(fout,"w");
 		i_x = 0;
-      
+
 		while(fscanf(FIN_CH1,"%lf\t%lf\t%lf",&fre[i_x],&xr[1],&xi[1]) != EOF && fscanf(FIN_CH2,"%lf\t%lf\t%lf",&fre[i_x],&xr[2],&xi[2]) != EOF){
 			xi[1] = -1.00 * xi[1];
 			xrr[i_x] = (xr[1] * xr[2] - xi[1] * xi[2]);
@@ -424,17 +423,17 @@ main(int *argc, char *argv[ ]){
 			i_x++;
 		}
 		i_x_max = i_x;
-      
+
 		for(i_x=0;i_x<i_x_max;i_x++){
 			fprintf(FOUT,"%lf\t%lf\t%lf\n", fre[i_x],xrr[i_x],xii[i_x]);
 		}
-      
+
 		fclose(FIN_CH1);
 		fclose(FIN_CH2);
 		fclose(FOUT);
     }
-    
-   
+
+
     /*################Sum all the data (power value) for each frequency################*/
 
     /* EMG_CH */
@@ -443,55 +442,55 @@ main(int *argc, char *argv[ ]){
 		xx[i_p] = 0;
 	}
 	i_f = 0;
-    
+
     for(i=0;i<(total_data /INTERVAL);i++){
-      
+
 		start = i * INTERVAL;
 		end = (i+1) * INTERVAL;
 
 		sprintf(fin,"%s_ch%d_%d-%d.fftp",argv[1],EMG_CH,start,end);
-      
+
 		if((FIN=fopen(fin,"r"))==NULL){
 			fprintf(stderr, "I can't find %s. I'm sorry !! \n",fin);
 			exit(1);
 		}
-      
+
 		i_p = 0;
 		while(fscanf(FIN,"%lf\t%lf", &fre[i_p], &y[i_f][i_p]) != EOF){
 			yy[i_p] += y[i_f][i_p];
-			xx[i_p] += sqrt(y[i_f][i_p]); 
+			xx[i_p] += sqrt(y[i_f][i_p]);
 			i_p++;
-		}      
+		}
 		i_f++;
 		fclose(FIN);
     }
-    
+
     i_p_max = i_p;
     i_f_max = i_f;
-    
+
     sprintf(fout,"%s-%d_ch%d.linuxcsd.px",argv[1],time,EMG_CH);
     sprintf(fout_power,"%s-%d_ch%d.linuxcsd.px-power",argv[1],time,EMG_CH);
-    
+
     FOUT = fopen(fout,"w");
     FOUT_POWER = fopen(fout_power,"w");
-    
+
     for(i_p = 0; i_p < i_p_max; i_p++){
 		fprintf(FOUT,"%lf\t%lf\n", fre[i_p], (yy[i_p]/(i_f_max * INTERVAL * 0.001)));
 		fprintf(FOUT_POWER,"%lf\t%lf\n", fre[i_p], (xx[i_p]/i_f_max));
     }
     fclose(FOUT);
     fclose(FOUT_POWER);
-    
+
     /* EEG_CH */
-    
+
     for(i_p=0;i_p<(INTERVAL/2);i_p++){
 		yy[i_p] = 0;
 		xx[i_p] = 0;
     }
     i_f = 0;
-    
+
     for(i=0;i<(total_data / INTERVAL);i++){
-      
+
 		start = i * INTERVAL;
 		end = (i+1) * INTERVAL;
 
@@ -500,18 +499,18 @@ main(int *argc, char *argv[ ]){
 		if((FIN=fopen(fin,"r"))==NULL){
 			fprintf(stderr, "I can't find %s. I'm sorry !! \n",fin);
 			exit(1);
-		}	
-	
+		}
+
 		i_p = 0;
 		while(fscanf(FIN,"%lf\t%lf", &fre[i_p], &y[i_f][i_p]) != EOF){
 			yy[i_p] += y[i_f][i_p];
 			xx[i_p] += sqrt(y[i_f][i_p]);
 			i_p++;
-		}      
+		}
 		i_f++;
 		fclose(FIN);
 	}
-    
+
     i_p_max = i_p;
     i_f_max = i_f;
 
@@ -520,14 +519,14 @@ main(int *argc, char *argv[ ]){
 
     FOUT = fopen(fout,"w");
     FOUT_POWER = fopen(fout_power,"w");
-    
+
     for(i_p = 0; i_p < i_p_max; i_p++){
 		fprintf(FOUT,"%lf\t%lf\n", fre[i_p], (yy[i_p]/(i_f_max * INTERVAL * 0.001)));
 		fprintf(FOUT_POWER,"%lf\t%lf\n", fre[i_p], (xx[i_p]/i_f_max));
     }
     fclose(FOUT);
     fclose(FOUT_POWER);
-  
+
 
     /* X_SP */
 
@@ -538,7 +537,7 @@ main(int *argc, char *argv[ ]){
     i_f = 0;
 
     for(i=0;i<(total_data /INTERVAL);i++){
-	    
+
 		start = i * INTERVAL;
 		end = (i+1) * INTERVAL;
 
@@ -548,26 +547,26 @@ main(int *argc, char *argv[ ]){
 			fprintf(stderr, "I can't find %s. I'm sorry !! \n",fin);
 			exit(1);
 		}
-	
+
 		i_p = 0;
-      
+
 		while(fscanf(FIN,"%lf\t%lf\t%lf", &fre[i_p], &xrr[i_p], &xii[i_p]) != EOF){
 			xx[i_p] += xrr[i_p];
 			yy[i_p] += xii[i_p];
 			i_p++;
-		}    
-      
+		}
+
 		i_f++;
 		fclose(FIN);
     }
-    
+
     i_p_max = i_p;
     i_f_max = i_f;
-    
+
     sprintf(fout,"%s-%d_ch%dch%d.linuxcsd.xsp",argv[1],time,EMG_CH,EEG_CH);
-    
+
     FOUT = fopen(fout,"w");
-    
+
     for(i_p = 0; i_p < i_p_max; i_p++){
 		fprintf(FOUT,"%lf\t%lf\t%lf\n", fre[i_p], (xx[i_p]/(i_f_max * INTERVAL * 0.001)), (yy[i_p]/(i_f_max * INTERVAL * 0.001)));
     }
@@ -579,15 +578,15 @@ main(int *argc, char *argv[ ]){
 	sprintf(fin_px,"%s-%d_ch%d.linuxcsd.px",argv[1],time,EMG_CH);
 	sprintf(fin_py,"%s-%d_ch%d.linuxcsd.py",argv[1],time,EEG_CH);
 	sprintf(fin_xsp,"%s-%d_ch%dch%d.linuxcsd.xsp",argv[1],time,EMG_CH,EEG_CH);
-	    
+
 	if((FIN_PX=fopen(fin_px,"r"))==NULL || (FIN_PY=fopen(fin_py,"r"))==NULL || (FIN_XSP=fopen(fin_xsp,"r"))==NULL){
 		fprintf(stderr, "I can't find %s , %s, and %s. I'm sorry !! \n",fin_px,fin_py,fin_xsp);
 		exit(1);
 	}
-     
+
 	sprintf(fout,"%s-%d_ch%dch%d.linuxcsd",argv[1],time,EMG_CH,EEG_CH);
 	FOUT = fopen(fout,"w");
-     
+
 	while(fscanf(FIN_XSP,"%lf\t%lf\t%lf", &fre[i], &cross_r, &cross_i) != EOF && fscanf(FIN_PX,"%lf\t%lf", &fre[i], &px) != EOF && fscanf(FIN_PY,"%lf\t%lf", &fre[i], &py) != EOF){
 		cohi = (cross_r * cross_r + cross_i * cross_i) / (px * py);
 		fprintf(FOUT, "%lf\t%lf\n",fre[i],cohi);
@@ -600,7 +599,7 @@ main(int *argc, char *argv[ ]){
 //  system("rm *.fftri");
 //  system("rm *.fftp");
 //  system("rm *.x_sp");
-     
+
 }
 
 void Manual(int argc){
