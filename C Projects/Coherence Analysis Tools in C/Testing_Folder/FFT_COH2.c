@@ -214,8 +214,12 @@ main(int *argc, char *argv[ ]){
 
 		for (i_data=1; i_data <= n-3; i_data++){
 			if (i_data< j_data){
-				temp = xr[i_data]; xr[i_data] = xr[j_data]; xr[j_data] = temp;
-				temp = xi[i_data]; xi[i_data] = xi[j_data]; xi[j_data] = temp;
+				temp = xr[i_data];
+				xr[i_data] = xr[j_data];
+				xr[j_data] = temp;
+				temp = xi[i_data];
+				xi[i_data] = xi[j_data];
+				xi[j_data] = temp;
 			}
 			k = n/2;
 			while (k <= j_data){
