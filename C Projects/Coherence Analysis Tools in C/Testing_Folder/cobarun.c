@@ -35,7 +35,7 @@ int main(int argc,char *argv[])
 //		sprintf(execution,"./FFT_COH %s %d 1",argv[1],channel);
 //		system(execution);
 //	}
-	sprintf(execution,"./FFT_COH2 %s 9 1",argv[1]);
+	sprintf(execution,"FFT_COH2 %s 9 1",argv[1]);
 	printf("system finished\n");
 	return 0;
 }
